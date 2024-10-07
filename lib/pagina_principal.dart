@@ -111,21 +111,23 @@ class DashboardScreen extends StatelessWidget {
                               ),
                               itemBuilder: (BuildContext context) =>
                                   <PopupMenuEntry<int>>[
-                                PopupMenuItem<int>(
-                                  value: 1,
-                                  child: TextButton(
-                                    onPressed: () {},
-                                    child: const Text('Opción 1'),
-                                  ),
-                                ),
-                                const PopupMenuItem<int>(
-                                  value: 2,
-                                  child: Text('Opción 2'),
-                                ),
-                                const PopupMenuItem<int>(
-                                  value: 3,
-                                  child: Text('Opción 3'),
-                                ),
+                                // PopupMenuItem<int>(
+                                //   value: 1,
+                                //   child: TextButton(
+                                //     onPressed: () {
+
+                                //     },
+                                //     child: const Text('Errores y Copias'),
+                                //   ),
+                                // ),
+                                // const PopupMenuItem<int>(
+                                //   value: 2,
+                                //   child: Text('Opción 2'),
+                                // ),
+                                // const PopupMenuItem<int>(
+                                //   value: 3,
+                                //   child: Text('Opción 3'),
+                                // ),
                               ],
                             ),
                             hintText: 'Buscar',
@@ -139,28 +141,44 @@ class DashboardScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 10),
-                      PopupMenuButton<int>(
+
+                      IconButton(
                         icon: const Icon(
                           Icons.notifications,
                           size: 30.0,
                           color: Colors.black,
                         ),
-                        itemBuilder: (BuildContext context) =>
-                            <PopupMenuEntry<int>>[
-                          const PopupMenuItem<int>(
-                            value: 1,
-                            child: Text('Opción 1'),
-                          ),
-                          const PopupMenuItem<int>(
-                            value: 2,
-                            child: Text('Opción 2'),
-                          ),
-                          const PopupMenuItem<int>(
-                            value: 3,
-                            child: Text('Opción 3'),
-                          ),
-                        ],
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NotificationScreen()),
+                          );
+                        },
                       ),
+
+                      // PopupMenuButton<int>(
+                      //   icon: const Icon(
+                      //     Icons.notifications,
+                      //     size: 30.0,
+                      //     color: Colors.black,
+                      //   ),
+                      //   // itemBuilder: (BuildContext context) =>
+                      //   //     <PopupMenuEntry<int>>[
+                      //   //   // const PopupMenuItem<int>(
+                      //   //   //   value: 1,
+                      //   //   //   child: Text('Opción 1'),
+                      //   //   // ),
+                      //   //   // const PopupMenuItem<int>(
+                      //   //   //   value: 2,
+                      //   //   //   child: Text('Opción 2'),
+                      //   //   // ),
+                      //   //   // const PopupMenuItem<int>(
+                      //   //   //   value: 3,
+                      //   //   //   child: Text('Opción 3'),
+                      //   //   // ),
+                      //   // ],
+                      // ),
                     ],
                   ),
                 ],
