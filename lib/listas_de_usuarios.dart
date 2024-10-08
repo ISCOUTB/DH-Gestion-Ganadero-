@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:informacion_animal/agregarusuario.dart';
+import 'package:informacion_animal/gestion_errores.dart';
+
+import 'package:informacion_animal/perfil.dart';
 
 // void main() {
 //   runApp(MyApp());
@@ -59,7 +63,12 @@ class _ListaUsuariosState extends State<ListaUsuarios> {
         actions: [
           TextButton(
             onPressed: () {
-              // Acción para 'Copia y Errores'
+              // Acción para retroceder a la pantalla anterior
+              Navigator.push(
+                // nos ayuda a navegar a otra pantalla, en este caso a la pantalla de GestionErrores
+                context,
+                MaterialPageRoute(builder: (context) => const GestionErrores()),
+              );
             },
             child: Text(
               "Copia y Errores",
@@ -125,6 +134,14 @@ class _ListaUsuariosState extends State<ListaUsuarios> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
+                                    // Navegar a la pantalla de perfil
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              UserProfileScreen()),
+                                    );
+
                                     // Acción para 'Editar'
                                   },
                                   child: Text('Editar'),
@@ -165,7 +182,13 @@ class _ListaUsuariosState extends State<ListaUsuarios> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Acción para agregar usuario
+                // Navegar a la pantalla de perfil
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddUserScreen()),
+                );
+
+                // Acción para 'Editar'
               },
               child: Text("Agregar Usuario"),
             ),

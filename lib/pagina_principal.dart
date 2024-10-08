@@ -4,7 +4,8 @@ import 'package:informacion_animal/listas_de_usuarios.dart';
 import 'package:informacion_animal/login.dart';
 // import 'package:informacion_animal/CustomCard.dart';
 import 'package:informacion_animal/notificaciones_vacuna.dart'; // Ensure this import is correct
-import 'package:informacion_animal/animal_info_screen.dart'; // Asegúrate de que la ruta del import sea correcta
+import 'package:informacion_animal/animal_info_screen.dart';
+import 'package:informacion_animal/perfil.dart'; // Asegúrate de que la ruta del import sea correcta
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -61,6 +62,11 @@ class DashboardScreen extends StatelessWidget {
                           switch (value) {
                             case 1:
                               // Navegar a la pantalla de perfil
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => UserProfileScreen()),
+                              );
                               break;
                             case 2:
                               // Manejar el cierre de sesión
