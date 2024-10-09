@@ -22,10 +22,10 @@ class MyApp extends StatelessWidget {
 
 class SymptomForm extends StatefulWidget {
   @override
-  _SymptomFormState createState() => _SymptomFormState();
+  SymptomFormState createState() => SymptomFormState();
 }
 
-class _SymptomFormState extends State<SymptomForm> {
+class SymptomFormState extends State<SymptomForm> {
   // Controladores para capturar los inputs
   final TextEditingController symptomController = TextEditingController();
   final TextEditingController durationController = TextEditingController();
