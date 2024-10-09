@@ -19,10 +19,10 @@ import 'package:informacion_animal/perfil.dart';
 
 class ListaUsuarios extends StatefulWidget {
   @override
-  _ListaUsuariosState createState() => _ListaUsuariosState();
+  ListaUsuariosState createState() => ListaUsuariosState();
 }
 
-class _ListaUsuariosState extends State<ListaUsuarios> {
+class ListaUsuariosState extends State<ListaUsuarios> {
   List<Map<String, String>> usuarios = [
     {'nombre': 'John Wick', 'rol': 'Administrator', 'id': '0.01'},
     {'nombre': 'Migue', 'rol': 'Ganadero', 'id': '0.02'},

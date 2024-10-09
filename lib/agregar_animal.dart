@@ -3,10 +3,13 @@ import 'dart:math';
 
 class AnimalFormScreen extends StatefulWidget {
   @override
-  _AnimalFormScreenState createState() => _AnimalFormScreenState();
+  AnimalFormScreenState createState() => AnimalFormScreenState();
 }
 
-class _AnimalFormScreenState extends State<AnimalFormScreen> {
+class AnimalFormScreenState extends State<AnimalFormScreen> {
+  static const String _hintText =
+      'Agregar texto'; // Constante para el texto repetido
+
   String? selectedYesNo;
   String? selectedVaccination;
   String? selectedMotherId;
@@ -116,8 +119,8 @@ class _AnimalFormScreenState extends State<AnimalFormScreen> {
                         Text('Raza'),
                         TextField(
                           controller: breedController,
-                          decoration:
-                              InputDecoration(hintText: 'Agregar texto'),
+                          decoration: InputDecoration(
+                              hintText: _hintText), // Usar la constante
                         ),
                         SizedBox(height: 16),
 
@@ -125,8 +128,8 @@ class _AnimalFormScreenState extends State<AnimalFormScreen> {
                         Text('Peso'),
                         TextField(
                           controller: weightController,
-                          decoration:
-                              InputDecoration(hintText: 'Agregar texto'),
+                          decoration: InputDecoration(
+                              hintText: _hintText), // Usar la constante
                         ),
                         SizedBox(height: 16),
 
@@ -162,8 +165,8 @@ class _AnimalFormScreenState extends State<AnimalFormScreen> {
                         Text('Fecha de nacimiento'),
                         TextField(
                           controller: birthDateController,
-                          decoration:
-                              InputDecoration(hintText: 'Agregar texto'),
+                          decoration: InputDecoration(
+                              hintText: _hintText), // Usar la constante
                         ),
                       ],
                     ),
@@ -217,8 +220,8 @@ class _AnimalFormScreenState extends State<AnimalFormScreen> {
                         Text('Estado del animal'),
                         TextField(
                           controller: animalStatusController,
-                          decoration:
-                              InputDecoration(hintText: 'Agregar texto'),
+                          decoration: InputDecoration(
+                              hintText: _hintText), // Usar la constante
                         ),
                         SizedBox(height: 16),
 

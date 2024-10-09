@@ -21,10 +21,10 @@ import 'package:informacion_animal/pagina_principal.dart';
 
 class MyButton extends StatefulWidget {
   @override
-  _MyButtonState createState() => _MyButtonState();
+  MyButtonState createState() => MyButtonState();
 }
 
-class _MyButtonState extends State<MyButton> {
+class MyButtonState extends State<MyButton> {
   Color _buttonColor = Colors.blue;
 
   void _changeColor() {
