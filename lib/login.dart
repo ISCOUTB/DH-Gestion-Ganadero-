@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'localDB.dart'; // Importa el archivo de la base de datos actualizado
 
 class LoginPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -10,101 +11,144 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.4,
-            height: 600,
-            padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: const Offset(0, 3),
+    return SafeArea(
+      child: Scaffold(
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                constraints: const BoxConstraints(
+                  maxWidth: 600,
                 ),
-              ],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Text(
-                    'Iniciar Sesión',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _header(context),
+                      const SizedBox(height: 20),
+                      _inputFields(context),
+                      const SizedBox(height: 20),
+                      _loginActions(context),
+                    ],
                   ),
-                  const SizedBox(height: 100),
-                  TextFormField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                      labelText: 'Nombre de usuario',
-                      border: const OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, ingresa tu nombre de usuario';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      labelText: 'Contraseña',
-                      border: const OutlineInputBorder(),
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                    ),
-                    obscureText: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, ingresa tu contraseña';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 50),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/principal');
-                      if (_formKey.currentState!.validate()) {
-                        // Procesar inicio de sesión
-                        if (kDebugMode) {
-                          print(
-                              'Nombre de usuario: ${_usernameController.text}');
-                        }
-                        if (kDebugMode) {
-                          print('Contraseña: ${_passwordController.text}');
-                        }
-                      }
-                    },
-                    child: const Text('Iniciar sesión'),
-                  ),
-                  const SizedBox(height: 50),
-                  const Text(
-                      "                                 No tienes una cuenta?"),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/signup');
-                      },
-                      child: const Text("Registrate"))
-                ],
+                ),
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  _header(context) {
+    return const Column(
+      children: [
+        Text(
+          'Iniciar Sesión',
+          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+        ),
+        Text('Ingrese sus datos para continuar'),
+      ],
+    );
+  }
+
+  _inputFields(context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TextFormField(
+          controller: _usernameController,
+          decoration: InputDecoration(
+            hintText: 'Nombre de usuario',
+            fillColor: Theme.of(context).primaryColor.withOpacity(0.1),
+            filled: true,
+            prefixIcon: const Icon(Icons.person),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide.none,
+            ),
+          ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Por favor, ingresa tu nombre de usuario';
+            }
+            return null;
+          },
+        ),
+        const SizedBox(height: 10),
+        TextFormField(
+          controller: _passwordController,
+          decoration: InputDecoration(
+            hintText: 'Contraseña',
+            fillColor: Theme.of(context).primaryColor.withOpacity(0.1),
+            filled: true,
+            prefixIcon: const Icon(Icons.key),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide.none,
+            ),
+          ),
+          obscureText: true,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Por favor, ingresa tu contraseña';
+            }
+            return null;
+          },
+        ),
+        const SizedBox(height: 40),
+        ElevatedButton(
+          onPressed: () async {
+            if (_formKey.currentState!.validate()) {
+              String username = _usernameController.text;
+              String password = _passwordController.text;
+
+              bool isValid = await DatabaseHelper().validateUser(username, password);
+              if (isValid) {
+                Navigator.pushNamed(context, '/principal');
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("Error"),
+                    content: const Text("Nombre de usuario o contraseña incorrectos"),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text("OK"),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            shape: const StadiumBorder(),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+          ),
+          child: const Text(
+            'Iniciar sesión',
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+      ],
+    );
+  }
+
+  _loginActions(context) {
+    return Column(
+      children: [
+        const Text("¿No tienes una cuenta?"),
+        TextButton(
+          onPressed: () => Navigator.pushNamed(context, '/signup'),
+          child: const Text("Regístrate"),
+        ),
+      ],
     );
   }
 }

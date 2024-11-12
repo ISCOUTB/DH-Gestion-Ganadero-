@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:informacion_animal/localDB.dart';
+import 'package:informacion_animal/animal_model.dart';
 
 class AnimalFormScreen extends StatefulWidget {
   @override
-  _AnimalFormScreenState createState() => _AnimalFormScreenState();
+  AnimalFormScreenState createState() => AnimalFormScreenState();
 }
 
-class _AnimalFormScreenState extends State<AnimalFormScreen> {
+class AnimalFormScreenState extends State<AnimalFormScreen> {
+  static const String _hintText = 'Agregar texto'; // Constante para el texto repetido
+
   String? selectedYesNo;
   String? selectedVaccination;
   String? selectedMotherId;
@@ -43,9 +47,20 @@ class _AnimalFormScreenState extends State<AnimalFormScreen> {
     });
   }
 
-  void _saveForm() {
-    // Lógica para guardar el formulario
-    // ...
+  void _saveForm() async {
+    final animal = Animal(
+      id: animalId,
+      breed: breedController.text,
+      gender: gender,
+      weight: double.tryParse(weightController.text) ?? 0.0,
+      birthDate: birthDateController.text,
+      isYoung: selectedYesNo == 'Sí',
+      motherId: selectedMotherId ?? 'No aplica',
+      status: animalStatusController.text,
+      vaccinated: selectedVaccination == 'Sí',
+    );
+
+    await DatabaseHelper().insertAnimal(animal);
 
     // Mostrar mensaje de éxito
     showDialog(
@@ -57,8 +72,8 @@ class _AnimalFormScreenState extends State<AnimalFormScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo
-                Navigator.of(context).pop(); // Regresar al menú principal
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
               },
               child: Text('OK'),
             ),
@@ -70,22 +85,19 @@ class _AnimalFormScreenState extends State<AnimalFormScreen> {
 
   void _deleteAnimal() {
     // Lógica para eliminar el animal
-    // ...
-
-    // Mostrar mensaje de confirmación
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmación'),
-          content: Text('El animal ha sido eliminado.'),
+          title: const Text('Confirmación'),
+          content: const Text('El animal ha sido eliminado.'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Cerrar el diálogo
                 Navigator.of(context).pop(); // Regresar al menú principal
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -99,183 +111,140 @@ class _AnimalFormScreenState extends State<AnimalFormScreen> {
       appBar: AppBar(
         title: Text('ID del animal: $animalId'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  // Left Column
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Breed input
-                        Text('Raza'),
-                        TextField(
-                          controller: breedController,
-                          decoration:
-                              InputDecoration(hintText: 'Agregar texto'),
-                        ),
-                        SizedBox(height: 16),
-
-                        // Weight input
-                        Text('Peso'),
-                        TextField(
-                          controller: weightController,
-                          decoration:
-                              InputDecoration(hintText: 'Agregar texto'),
-                        ),
-                        SizedBox(height: 16),
-
-                        // Gender selection
-                        Text('Sexo'),
-                        Row(
-                          children: [
-                            Radio(
-                              value: 'Macho',
-                              groupValue: gender,
-                              onChanged: (value) {
-                                setState(() {
-                                  gender = value.toString();
-                                });
-                              },
-                            ),
-                            Text('Macho'),
-                            Radio(
-                              value: 'Hembra',
-                              groupValue: gender,
-                              onChanged: (value) {
-                                setState(() {
-                                  gender = value.toString();
-                                });
-                              },
-                            ),
-                            Text('Hembra'),
-                          ],
-                        ),
-                        SizedBox(height: 16),
-
-                        // Birth Date input
-                        Text('Fecha de nacimiento'),
-                        TextField(
-                          controller: birthDateController,
-                          decoration:
-                              InputDecoration(hintText: 'Agregar texto'),
-                        ),
-                      ],
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Raza'),
+                TextField(
+                  controller: breedController,
+                  decoration: const InputDecoration(hintText: _hintText),
+                ),
+                const SizedBox(height: 16),
+                const Text('Peso'),
+                TextField(
+                  controller: weightController,
+                  decoration: const InputDecoration(hintText: _hintText),
+                ),
+                const SizedBox(height: 16),
+                const Text('Sexo'),
+                Row(
+                  children: [
+                    Radio(
+                      value: 'Macho',
+                      groupValue: gender,
+                      onChanged: (value) {
+                        setState(() {
+                          gender = value.toString();
+                        });
+                      },
                     ),
-                  ),
-                  SizedBox(width: 16),
-
-                  // Right Column
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Is it a young animal?
-                        Text('¿Es cría?'),
-                        DropdownButton<String>(
-                          value: selectedYesNo,
-                          items: ['Sí', 'No']
-                              .map((label) => DropdownMenuItem(
-                                    child: Text(label),
-                                    value: label,
-                                  ))
-                              .toList(),
-                          hint: Text('Selecciona Sí o No'),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedYesNo = value;
-                            });
-                          },
-                        ),
-                        SizedBox(height: 16),
-
-                        // Mother's ID selection
-                        Text('ID de la madre'),
-                        DropdownButton<String>(
-                          value: selectedMotherId,
-                          items: ['ID 1', 'ID 2', 'No aplica']
-                              .map((label) => DropdownMenuItem(
-                                    child: Text(label),
-                                    value: label,
-                                  ))
-                              .toList(),
-                          hint: Text('Selecciona ID de la madre'),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedMotherId = value;
-                            });
-                          },
-                        ),
-                        SizedBox(height: 16),
-
-                        // Animal state
-                        Text('Estado del animal'),
-                        TextField(
-                          controller: animalStatusController,
-                          decoration:
-                              InputDecoration(hintText: 'Agregar texto'),
-                        ),
-                        SizedBox(height: 16),
-
-                        // Vaccination applied
-                        Text('¿Se le ha aplicado alguna vacuna?'),
-                        DropdownButton<String>(
-                          value: selectedVaccination,
-                          items: ['Sí', 'No']
-                              .map((label) => DropdownMenuItem(
-                                    child: Text(label),
-                                    value: label,
-                                  ))
-                              .toList(),
-                          hint: Text('Selecciona Sí o No'),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedVaccination = value;
-                            });
-                          },
-                        ),
-                      ],
+                    const Text('Macho'),
+                    Radio(
+                      value: 'Hembra',
+                      groupValue: gender,
+                      onChanged: (value) {
+                        setState(() {
+                          gender = value.toString();
+                        });
+                      },
                     ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 16),
-
-              // Add animal image (this spans the two columns)
-              Text('Ingrese una foto del animal'),
-              Container(
-                height: 150,
-                width: double.infinity,
-                color: Colors.grey[300],
-                child: Icon(Icons.add_a_photo),
-              ),
-
-              SizedBox(height: 16),
-
-              // Buttons for saving and deleting
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: _saveForm,
-                    child: Text('Finalizar y Guardar'),
-                  ),
-                  ElevatedButton(
-                    onPressed: _deleteAnimal,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red, // Red color for delete
+                    const Text('Hembra'),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                const Text('Fecha de nacimiento'),
+                TextField(
+                  controller: birthDateController,
+                  decoration: const InputDecoration(hintText: _hintText),
+                ),
+                const SizedBox(height: 16),
+                const Text('¿Es cría?'),
+                DropdownButton<String>(
+                  value: selectedYesNo,
+                  items: ['Sí', 'No']
+                      .map((label) => DropdownMenuItem(
+                    value: label,
+                    child: Text(label),
+                  ))
+                      .toList(),
+                  hint: const Text('Selecciona Sí o No'),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedYesNo = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                const Text('ID de la madre'),
+                DropdownButton<String>(
+                  value: selectedMotherId,
+                  items: ['ID 1', 'ID 2', 'No aplica']
+                      .map((label) => DropdownMenuItem(
+                    value: label,
+                    child: Text(label),
+                  ))
+                      .toList(),
+                  hint: const Text('Selecciona ID de la madre'),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedMotherId = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                const Text('Estado del animal'),
+                TextField(
+                  controller: animalStatusController,
+                  decoration: const InputDecoration(hintText: _hintText),
+                ),
+                const SizedBox(height: 16),
+                const Text('¿Se le ha aplicado alguna vacuna?'),
+                DropdownButton<String>(
+                  value: selectedVaccination,
+                  items: ['Sí', 'No']
+                      .map((label) => DropdownMenuItem(
+                    value: label,
+                    child: Text(label),
+                  ))
+                      .toList(),
+                  hint: const Text('Selecciona Sí o No'),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedVaccination = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                const Text('Ingrese una foto del animal'),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.2, // Tamaño dinámico
+                  width: double.infinity,
+                  color: Colors.grey[300],
+                  child: const Icon(Icons.add_a_photo),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _saveForm,
+                      child: const Text('Finalizar y Guardar'),
                     ),
-                    child: Text('Eliminar'),
-                  ),
-                ],
-              ),
-            ],
+                    ElevatedButton(
+                      onPressed: _deleteAnimal,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red, // Botón rojo para eliminar
+                      ),
+                      child: const Text('Eliminar'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

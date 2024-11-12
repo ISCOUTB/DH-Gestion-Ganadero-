@@ -4,7 +4,8 @@ import 'package:informacion_animal/listas_de_usuarios.dart';
 import 'package:informacion_animal/login.dart';
 // import 'package:informacion_animal/CustomCard.dart';
 import 'package:informacion_animal/notificaciones_vacuna.dart'; // Ensure this import is correct
-import 'package:informacion_animal/animal_info_screen.dart'; // Asegúrate de que la ruta del import sea correcta
+import 'package:informacion_animal/animal_info_screen.dart';
+import 'package:informacion_animal/perfil.dart'; // Asegúrate de que la ruta del import sea correcta
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -27,8 +28,7 @@ class DashboardScreen extends StatelessWidget {
             automaticallyImplyLeading: false,
             backgroundColor: Colors.grey[300],
             flexibleSpace: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 18.0, vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -42,8 +42,7 @@ class DashboardScreen extends StatelessWidget {
                           size: 30.0,
                           color: Colors.black,
                         ),
-                        itemBuilder: (BuildContext context) =>
-                            <PopupMenuEntry<int>>[
+                        itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
                           const PopupMenuItem<int>(
                             value: 1,
                             child: Text('Perfil'),
@@ -60,28 +59,27 @@ class DashboardScreen extends StatelessWidget {
                         onSelected: (int value) {
                           switch (value) {
                             case 1:
-                              // Navegar a la pantalla de perfil
-                              break;
-                            case 2:
-                              // Manejar el cierre de sesión
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginPage()),
+                                MaterialPageRoute(builder: (context) => UserProfileScreen()),
+                              );
+                              break;
+                            case 2:
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => LoginPage()),
                               );
                               break;
                             case 3:
-                              // Navegar a la pantalla de lista de usuarios
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => ListaUsuarios()),
+                                MaterialPageRoute(builder: (context) => ListaUsuarios()),
                               );
                               break;
                           }
                         },
                       ),
-                      const SizedBox(width: 2),
+                      const SizedBox(width: 8),
                       const Text(
                         'Usuario',
                         style: TextStyle(
@@ -92,94 +90,45 @@ class DashboardScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(width: 8),
                   // Barra de búsqueda y notificaciones
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 300,
-                        height: 40,
-                        child: TextField(
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            prefixIcon: const Icon(Icons.search),
-                            suffixIcon: PopupMenuButton<int>(
-                              icon: const Icon(
-                                Icons.menu,
-                                size: 20.0,
-                                color: Colors.black,
+                  Expanded( // Asegura que la barra de búsqueda ocupe el espacio disponible
+                    child: Row(
+                      children: [
+                        Expanded( // Hace que la barra de búsqueda se ajuste automáticamente
+                          child: SizedBox(
+                            height: 40,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                prefixIcon: const Icon(Icons.search),
+                                hintText: 'Buscar',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  borderSide: BorderSide.none,
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                               ),
-                              itemBuilder: (BuildContext context) =>
-                                  <PopupMenuEntry<int>>[
-                                // PopupMenuItem<int>(
-                                //   value: 1,
-                                //   child: TextButton(
-                                //     onPressed: () {
-
-                                //     },
-                                //     child: const Text('Errores y Copias'),
-                                //   ),
-                                // ),
-                                // const PopupMenuItem<int>(
-                                //   value: 2,
-                                //   child: Text('Opción 2'),
-                                // ),
-                                // const PopupMenuItem<int>(
-                                //   value: 3,
-                                //   child: Text('Opción 3'),
-                                // ),
-                              ],
                             ),
-                            hintText: 'Buscar',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              borderSide: BorderSide.none,
-                            ),
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 10),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-
-                      IconButton(
-                        icon: const Icon(
-                          Icons.notifications,
-                          size: 30.0,
-                          color: Colors.black,
+                        const SizedBox(width: 10),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.notifications,
+                            size: 30.0,
+                            color: Colors.black,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => NotificationScreen()),
+                            );
+                          },
                         ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NotificationScreen()),
-                          );
-                        },
-                      ),
-
-                      // PopupMenuButton<int>(
-                      //   icon: const Icon(
-                      //     Icons.notifications,
-                      //     size: 30.0,
-                      //     color: Colors.black,
-                      //   ),
-                      //   // itemBuilder: (BuildContext context) =>
-                      //   //     <PopupMenuEntry<int>>[
-                      //   //   // const PopupMenuItem<int>(
-                      //   //   //   value: 1,
-                      //   //   //   child: Text('Opción 1'),
-                      //   //   // ),
-                      //   //   // const PopupMenuItem<int>(
-                      //   //   //   value: 2,
-                      //   //   //   child: Text('Opción 2'),
-                      //   //   // ),
-                      //   //   // const PopupMenuItem<int>(
-                      //   //   //   value: 3,
-                      //   //   //   child: Text('Opción 3'),
-                      //   //   // ),
-                      //   // ],
-                      // ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -188,26 +137,35 @@ class DashboardScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
+
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Total animales: xxxx',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              'Total de animales: xxxx',  // Cambia este valor según el número total de animales
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10), // Espacio entre el texto y las tarjetas
             Expanded(
-              child: SingleChildScrollView(
-                child: GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 5, // Número de columnas
-                  crossAxisSpacing: 20.0, // Espacio entre columnas
-                  mainAxisSpacing: 30.0, // Espacio entre filas
-                  childAspectRatio: 1.2, // Relación de aspecto
-                  children: [
-                    CustomCard(
+              child: GridView.builder(
+
+
+
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 180, // Controla el tamaño máximo de cada tarjeta
+                  crossAxisSpacing: 20.0,
+                  mainAxisSpacing: 30.0,
+                  childAspectRatio: 0.8, // Controla la relación de aspecto de cada tarjeta
+                ),
+
+                itemCount: 6, // Número total de tarjetas (5 animales + 1 botón)
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return CustomCard(
                       color: Colors.green[100]!,
                       icon: Icons.check_circle,
                       title: 'ID animal 1',
@@ -215,26 +173,25 @@ class DashboardScreen extends StatelessWidget {
                       iconBackgroundColor: Colors.green,
                       warningIcon: Icons.vaccines,
                       warningIconColor: Colors.green,
-                      imageUrl:
-                          'https://cdn.pixabay.com/photo/2016/10/04/23/52/cow-1715829_1280.jpg',
+                      imageUrl: 'https://cdn.pixabay.com/photo/2016/10/04/23/52/cow-1715829_1280.jpg',
                       onTap: () {
-                        // Accion al tocar toda la tarjeta
+                        // Acción al tocar toda la tarjeta
                       },
                       onTitleTap: () {
-                        // Navegar a otra pantalla al tocar el título
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const AnimalInfoScreen(
-                                animalId: 1,
-                                title: 'Animal Info',
-                                imageUrl:
-                                    'https://cdn.pixabay.com/photo/2016/10/04/23/52/cow-1715829_1280.jpg'),
+                              animalId: 1,
+                              title: 'Animal Info',
+                              imageUrl: 'https://cdn.pixabay.com/photo/2016/10/04/23/52/cow-1715829_1280.jpg',
+                            ),
                           ),
                         );
                       },
-                    ),
-                    CustomCard(
+                    );
+                  } else if (index == 1) {
+                    return CustomCard(
                       color: Colors.blue[100]!,
                       icon: Icons.check_circle,
                       title: 'ID animal 2',
@@ -242,26 +199,25 @@ class DashboardScreen extends StatelessWidget {
                       iconBackgroundColor: Colors.green,
                       warningIcon: Icons.vaccines,
                       warningIconColor: Colors.yellow,
-                      imageUrl:
-                          'https://images.unsplash.com/photo-1660613027300-d82f6471ea9d?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2FyYSUyMGRlJTIwdmFjYXxlbnwwfHwwfHx8MA%3D%3D',
+                      imageUrl: 'https://images.unsplash.com/photo-1660613027300-d82f6471ea9d?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2FyYSUyMGRlJTIwdmFjYXxlbnwwfHwwfHx8MA%3D%3D',
                       onTap: () {
-                        // Accion al tocar toda la tarjeta
+                        // Acción al tocar toda la tarjeta
                       },
                       onTitleTap: () {
-                        // Navegar a otra pantalla al tocar el título
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const AnimalInfoScreen(
-                                animalId: 2,
-                                title: 'Animal Info',
-                                imageUrl:
-                                    'https://images.unsplash.com/photo-1660613027300-d82f6471ea9d?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2FyYSUyMGRlJTIwdmFjYXxlbnwwfHwwfHx8MA%3D%3D'),
+                              animalId: 2,
+                              title: 'Animal Info',
+                              imageUrl: 'https://images.unsplash.com/photo-1660613027300-d82f6471ea9d?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2FyYSUyMGRlJTIwdmFjYXxlbnwwfHwwfHx8MA%3D%3D',
+                            ),
                           ),
                         );
                       },
-                    ),
-                    CustomCard(
+                    );
+                  } else if (index == 2) {
+                    return CustomCard(
                       color: Colors.purple[100]!,
                       icon: Icons.warning,
                       title: 'ID animal 3',
@@ -269,26 +225,25 @@ class DashboardScreen extends StatelessWidget {
                       iconBackgroundColor: Colors.red,
                       warningIcon: Icons.vaccines,
                       warningIconColor: Colors.red,
-                      imageUrl:
-                          'https://www.shutterstock.com/image-photo/close-cow-black-white-friendly-260nw-2341064189.jpg',
+                      imageUrl: 'https://www.shutterstock.com/image-photo/close-cow-black-white-friendly-260nw-2341064189.jpg',
                       onTap: () {
-                        // Accion al tocar toda la tarjeta
+                        // Acción al tocar toda la tarjeta
                       },
                       onTitleTap: () {
-                        // Navegar a otra pantalla al tocar el título
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const AnimalInfoScreen(
-                                animalId: 3,
-                                title: 'Animal Info',
-                                imageUrl:
-                                    'https://www.shutterstock.com/image-photo/close-cow-black-white-friendly-260nw-2341064189.jpg'),
+                              animalId: 3,
+                              title: 'Animal Info',
+                              imageUrl: 'https://www.shutterstock.com/image-photo/close-cow-black-white-friendly-260nw-2341064189.jpg',
+                            ),
                           ),
                         );
                       },
-                    ),
-                    CustomCard(
+                    );
+                  } else if (index == 3) {
+                    return CustomCard(
                       color: Colors.yellow[100]!,
                       icon: Icons.warning_amber,
                       title: 'ID animal 4',
@@ -296,26 +251,25 @@ class DashboardScreen extends StatelessWidget {
                       iconBackgroundColor: Colors.yellow,
                       warningIcon: Icons.vaccines,
                       warningIconColor: Colors.yellow,
-                      imageUrl:
-                          'https://st3.depositphotos.com/29384342/34178/i/450/depositphotos_341784154-stock-photo-cow-cows-cattle-pasture.jpg',
+                      imageUrl: 'https://st3.depositphotos.com/29384342/34178/i/450/depositphotos_341784154-stock-photo-cow-cows-cattle-pasture.jpg',
                       onTap: () {
-                        // Accion al tocar toda la tarjeta
+                        // Acción al tocar toda la tarjeta
                       },
                       onTitleTap: () {
-                        // Navegar a otra pantalla al tocar el título
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const AnimalInfoScreen(
-                                animalId: 4,
-                                title: 'Animal Info',
-                                imageUrl:
-                                    'https://st3.depositphotos.com/29384342/34178/i/450/depositphotos_341784154-stock-photo-cow-cows-cattle-pasture.jpg'),
+                              animalId: 4,
+                              title: 'Animal Info',
+                              imageUrl: 'https://st3.depositphotos.com/29384342/34178/i/450/depositphotos_341784154-stock-photo-cow-cows-cattle-pasture.jpg',
+                            ),
                           ),
                         );
                       },
-                    ),
-                    CustomCard(
+                    );
+                  } else if (index == 4) {
+                    return CustomCard(
                       color: Colors.red[100]!,
                       icon: Icons.warning,
                       title: 'ID animal 5',
@@ -323,48 +277,46 @@ class DashboardScreen extends StatelessWidget {
                       iconBackgroundColor: Colors.red,
                       warningIcon: Icons.vaccines,
                       warningIconColor: Colors.red,
-                      imageUrl:
-                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf6v_PsJBpClTa6zN212h8Igk5a-mEgB2iqaHbAnA04BDm1XusFG2LyAn2UvAq1XZYPmI&usqp=CAU',
+                      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf6v_PsJBpClTa6zN212h8Igk5a-mEgB2iqaHbAnA04BDm1XusFG2LyAn2UvAq1XZYPmI&usqp=CAU',
                       onTap: () {
-                        // Accion al tocar toda la tarjeta
+                        // Acción al tocar toda la tarjeta
                       },
                       onTitleTap: () {
-                        // Navegar a otra pantalla al tocar el título
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const AnimalInfoScreen(
-                                animalId: 5,
-                                title: 'Animal Info',
-                                imageUrl:
-                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf6v_PsJBpClTa6zN212h8Igk5a-mEgB2iqaHbAnA04BDm1XusFG2LyAn2UvAq1XZYPmI&usqp=CAU'),
+                              animalId: 5,
+                              title: 'Animal Info',
+                              imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf6v_PsJBpClTa6zN212h8Igk5a-mEgB2iqaHbAnA04BDm1XusFG2LyAn2UvAq1XZYPmI&usqp=CAU',
+                            ),
                           ),
                         );
                       },
-                    ),
+                    );
+                  } else {
                     // Botón de añadir
-                    Center(
+                    return Center(
                       child: SizedBox(
                         width: 350,
                         height: 140,
                         child: FloatingActionButton.extended(
                           onPressed: () {
                             Navigator.push(
-                              // nos ayuda a navegar a otra pantalla, en este caso a la pantalla de GestionErrores
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => AnimalFormScreen()),
+                                builder: (context) => AnimalFormScreen(),
+                              ),
                             );
-                            // Acción al hacer clic, "por agregar"
                           },
                           icon: const Icon(Icons.add, size: 50),
                           label: const Text('Añadir'),
                           backgroundColor: Colors.grey[400],
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    );
+                  }
+                },
               ),
             ),
           ],
@@ -493,13 +445,13 @@ class CustomCard extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  AnimalFormScreen(), // Asegúrate de que esta pantalla exista
+                              AnimalFormScreen(), // Asegúrate de que esta pantalla exista
                             ),
                           );
                         }
                       },
                       itemBuilder: (BuildContext context) =>
-                          <PopupMenuEntry<String>>[
+                      <PopupMenuEntry<String>>[
                         const PopupMenuItem<String>(
                           value: 'Editar',
                           child: Text('Editar'),

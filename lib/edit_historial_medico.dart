@@ -19,10 +19,10 @@ class MyApp extends StatelessWidget {
 
 class MedicalHistoryForm extends StatefulWidget {
   @override
-  _MedicalHistoryFormState createState() => _MedicalHistoryFormState();
+  MedicalHistoryFormState createState() => MedicalHistoryFormState();
 }
 
-class _MedicalHistoryFormState extends State<MedicalHistoryForm> {
+class MedicalHistoryFormState extends State<MedicalHistoryForm> {
   final _formKey = GlobalKey<FormState>();
 
   // Controllers for form fields
@@ -42,10 +42,11 @@ class _MedicalHistoryFormState extends State<MedicalHistoryForm> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
-    if (picked != null && picked != _selectedDate)
+    if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
       });
+    }
   }
 
   Future<void> _selectNextConsultationDate(BuildContext context) async {
@@ -55,10 +56,11 @@ class _MedicalHistoryFormState extends State<MedicalHistoryForm> {
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
     );
-    if (picked != null)
+    if (picked != null) {
       setState(() {
         _nextConsultationDate = picked;
       });
+    }
   }
 
   @override
@@ -240,6 +242,17 @@ class _MedicalHistoryFormState extends State<MedicalHistoryForm> {
       required DateTime? selectedDate,
       required VoidCallback onPressed,
       bool optional = false}) {
+    String displayText;
+
+    // Eliminar la anidación del operador ternario
+    if (selectedDate != null) {
+      displayText = '$label: ${DateFormat.yMMMd().format(selectedDate)}';
+    } else if (optional) {
+      displayText = '$label: No seleccionada';
+    } else {
+      displayText = '$label: Seleccione una fecha';
+    }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Row(
@@ -251,9 +264,7 @@ class _MedicalHistoryFormState extends State<MedicalHistoryForm> {
           SizedBox(width: 16),
           Expanded(
             child: Text(
-              selectedDate != null
-                  ? '$label: ${DateFormat.yMMMd().format(selectedDate)}'
-                  : '$label: ${optional ? 'No seleccionada' : 'Seleccione una fecha'}',
+              displayText,
               style: TextStyle(fontSize: 16),
             ),
           ),

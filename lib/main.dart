@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:informacion_animal/gestion_errores.dart';
 import 'package:informacion_animal/login.dart';
-import 'package:informacion_animal/notificaciones_vacuna.dart';
+import 'package:informacion_animal/notificaciones_vacuna.dart'; 
 import 'package:informacion_animal/pagina_principal.dart';
 import 'package:informacion_animal/signup.dart';
+import 'package:sqflite/sqflite.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         home: LoginPage(),
         routes: <String, WidgetBuilder>{
           '/login': (context) => LoginPage(),
-          '/signup': (context) => const SignUpScreen(),
+          '/signup': (context) => SignUpScreen(),
           '/gestion': (context) => const GestionErrores(),
           '/principal': (context) => const DashboardScreen(),
           '/vacunasnotificaciones': (context) => NotificationScreen(),

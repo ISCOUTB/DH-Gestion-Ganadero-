@@ -44,7 +44,7 @@ class AnimalStateScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildStatusHeader(currentAnimalState.healthStatus),
+                buildStatusHeader(currentAnimalState.healthStatus),
                 SizedBox(height: 24),
                 _buildDetailRow(
                   icon: Icons.pets,
@@ -113,7 +113,7 @@ class AnimalStateScreen extends StatelessWidget {
   }
 
   // Método para mostrar el estado de salud del animal de manera visual
-  Widget _buildStatusHeader(String healthStatus) {
+  Widget buildStatusHeader(String healthStatus) {
     Color statusColor;
     IconData statusIcon;
 
